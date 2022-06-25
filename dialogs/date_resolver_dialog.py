@@ -27,6 +27,7 @@ class DateResolverDialog(CancelAndHelpDialog):
             dialog_id or DateResolverDialog.__name__, telemetry_client
         )
         self.telemetry_client = telemetry_client
+        self._dialog_id = dialog_id
 
         date_time_prompt = DateTimePrompt(
             DateTimePrompt.__name__, DateResolverDialog.datetime_prompt_validator
@@ -49,7 +50,13 @@ class DateResolverDialog(CancelAndHelpDialog):
         """Prompt for the date."""
         timex = step_context.options
 
-        prompt_msg = "On what date would you like to travel?"
+        if self._dialog_id == "StartDate":
+            prompt_msg = "What is the departure date?"
+        elif self._dialog_id == "EndDate":
+            prompt_msg = "What is the return date?"
+        else:
+            prompt_msg = "On what date would you like to travel?"
+
         reprompt_msg = (
             "I'm sorry, for best results, please enter your travel "
             "date including the month, day and year."
