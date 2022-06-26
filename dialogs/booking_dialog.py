@@ -97,7 +97,7 @@ class BookingDialog(CancelAndHelpDialog):
             return await step_context.prompt(
                 TextPrompt.__name__,
                 PromptOptions(
-                    prompt=MessageFactory.text(f"What is your budget for this trip? {booking_details.budget}")
+                    prompt=MessageFactory.text(f"What is your budget for this trip?")
                 ),
             )  # pylint: disable=line-too-long,bad-continuation
 
