@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'fly-me-app'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0443F6C339E34E21AF3A2C529FDDF681 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0F3DAD60A2FD43FB97F44EA7247451B2 }}
