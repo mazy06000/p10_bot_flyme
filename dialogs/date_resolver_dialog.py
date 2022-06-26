@@ -62,7 +62,7 @@ class DateResolverDialog(CancelAndHelpDialog):
             "date including the month, day and year."
         )
 
-        if timex is None:
+        if timex is None or "definite" not in Timex(timex).types:
             # We were not given any date at all so prompt the user.
             return await step_context.prompt(
                 DateTimePrompt.__name__,

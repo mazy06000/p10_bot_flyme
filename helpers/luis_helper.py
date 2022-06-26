@@ -8,6 +8,25 @@ from dateutil import parser
 from booking_details import BookingDetails
 
 
+def get_timex(or_date):
+    date = parser.parse(or_date)
+    date_str = parser.parse(or_date).strftime("%Y-%m-%d")
+
+    year, month, day = date_str.split('-')
+
+    if day not in or_date:
+        day = "XX"
+
+    if date.strftime("%b").lower() not in or_date:
+        month = "XX"
+
+    if year not in or_date:
+        year = "XXXX"
+
+    final_date = f"{year}-{month}-{day}"
+    
+    return final_date
+
 class Intent(Enum):
     BOOK_FLIGHT = "book"
     NONE_INTENT = "NoneIntent"
@@ -80,14 +99,14 @@ class LuisHelper:
                 )
                 if len(start_date_entities) > 0:
                     if recognizer_result.entities.get("str_date")[0]:
-                        result.str_date = parser.parse(start_date_entities[0]).strftime("%Y-%m-%d")
+                        result.str_date = get_timex(start_date_entities[0])
                 
                 end_date_entities = recognizer_result.entities.get(
                     "end_date", []
                 )
                 if len(end_date_entities) > 0:
                     if recognizer_result.entities.get("end_date")[0]:
-                        result.end_date = parser.parse(end_date_entities[0]).strftime("%Y-%m-%d")
+                        result.end_date = get_timex(end_date_entities[0])
 
                 # This value will be a TIMEX. And we are only interested in a Date so grab the first result and drop
                 # the Time part. TIMEX is a format that represents DateTime expressions that include some ambiguity.

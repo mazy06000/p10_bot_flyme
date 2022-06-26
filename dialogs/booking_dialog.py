@@ -167,7 +167,7 @@ class BookingDialog(CancelAndHelpDialog):
         """Complete the interaction and end the dialog."""
 
         booking_details = step_context.options
-        
+
         if step_context.result:
             self.telemetry_client.track_trace(
                 "booking_accepted",
@@ -175,7 +175,7 @@ class BookingDialog(CancelAndHelpDialog):
             )
 
             return await step_context.end_dialog(booking_details)
-
+        
         self.telemetry_client.track_trace(
                 "booking_refused",
                 properties=booking_details.__dict__,
