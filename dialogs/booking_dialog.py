@@ -183,7 +183,7 @@ class BookingDialog(CancelAndHelpDialog):
                 properties=booking_details.__dict__,
             )
 
-        return await step_context.end_dialog(booking_details)
+        return await step_context.end_dialog()
 
     def is_ambiguous(self, timex: str) -> bool:
         """Ensure time is correct."""
