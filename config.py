@@ -16,7 +16,7 @@ INSIGHTS_KEY  = os.getenv("INSIGHTS_KEY")
 class DefaultConfig:
     """Configuration for the bot."""
 
-    PORT = 8000
+    PORT = 8000 #3978
     APP_ID = os.environ.get("MicrosoftAppId", "")
     APP_PASSWORD = os.environ.get("MicrosoftAppPassword", "")
     LUIS_APP_ID = os.environ.get("LuisAppId", LUIS_ID)
