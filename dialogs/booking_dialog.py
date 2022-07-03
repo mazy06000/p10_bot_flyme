@@ -176,7 +176,8 @@ class BookingDialog(CancelAndHelpDialog):
             # )
             self.telemetry_client.track_metric(
                 "booking_accepted",
-                0,0
+                0,
+                properties=booking_details.__dict__,
             )
 
             return await step_context.end_dialog(booking_details)
@@ -189,7 +190,8 @@ class BookingDialog(CancelAndHelpDialog):
 
         self.telemetry_client.track_metric(
                 "booking_refused",
-                0,0
+                0,
+                properties=booking_details.__dict__,
             )
 
         return await step_context.end_dialog()
