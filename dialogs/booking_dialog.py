@@ -170,20 +170,27 @@ class BookingDialog(CancelAndHelpDialog):
         booking_details = step_context.options
 
         if step_context.result:
-            self.telemetry_client.track_trace(
+            # self.telemetry_client.track_trace(
+            #     "booking_accepted",
+            #     properties=booking_details.__dict__,
+            # )
+            self.telemetry_client.track_metric(
                 "booking_accepted",
-                properties=booking_details.__dict__,
+                0,0
             )
 
             return await step_context.end_dialog(booking_details)
         
-        self.telemetry_client.track_trace(
-                "booking_refused",
-                severity=Severity.warning,
-                properties=booking_details.__dict__,
-            )
+        # self.telemetry_client.track_trace(
+        #         "booking_refused",
+        #         severity=Severity.error,
+        #         properties=booking_details.__dict__,
+        #     )
 
-        print("ok")
+        self.telemetry_client.track_metric(
+                "booking_refused",
+                0,0
+            )
 
         return await step_context.end_dialog()
 
