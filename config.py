@@ -4,13 +4,13 @@
 """Configuration for the bot."""
 
 import os
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
-LUIS_ID  = os.getenv("LUIS_ID")
-LUIS_KEY  = os.getenv("LUIS_KEY")
-LUIS_HOST  = os.getenv("LUIS_HOST")
-INSIGHTS_KEY  = os.getenv("INSIGHTS_KEY")
+# LUIS_ID  = os.getenv("LUIS_ID")
+# LUIS_KEY  = os.getenv("LUIS_KEY")
+# LUIS_HOST  = os.getenv("LUIS_HOST")
+# INSIGHTS_KEY  = os.getenv("INSIGHTS_KEY")
 
 
 class DefaultConfig:
