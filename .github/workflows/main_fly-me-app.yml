@@ -38,14 +38,13 @@ jobs:
           name: python-app
           path: |
             . 
-            !venv/
-      - name: Sample Azure action
+            !venv/        
+      - name: Test with pytest
         env: # Or as an environment variable
           INSIGHTS_KEY: ${{ secrets.INSIGHTS_KEY }}
           LUIS_HOST: ${{ secrets.LUIS_HOST }}
           LUIS_ID: ${{ secrets.LUIS_ID }}
           LUIS_KEY: ${{ secrets.LUIS_KEY }}
-      - name: Test with pytest
         run: |
           pytest
 
