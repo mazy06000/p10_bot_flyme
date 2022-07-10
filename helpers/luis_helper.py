@@ -108,13 +108,7 @@ class LuisHelper:
                     if recognizer_result.entities.get("end_date")[0]:
                         result.end_date = get_timex(end_date_entities[0])
 
-                result.turns.append({"text": turn_context,
-                                     "labels": {"acts": [
-                                         {"args": [
-                                             {"val": intent, "key": "intent"}]},
-                                         {"args": [{"val": val, "key": key} for key, val in result.__dict__.items(
-                                         ) if key != 'turns' and val is not None]}
-                                     ]}})
+                result.turns.append(recognizer_result.text)
 
         except Exception as exception:
             print(exception)

@@ -22,7 +22,7 @@ import sys
 sys.path.append('../p10_bot_flyme')
 
 
-class TestLuis(aiounittest.AsyncTestCase):
+class TestBotLuis(aiounittest.AsyncTestCase):
 
     async def test_execute_luis_query(self):
         CONFIG = DefaultConfig()
@@ -45,7 +45,9 @@ class TestLuis(aiounittest.AsyncTestCase):
             json.dumps({"intent": "book",
                         "booking_details": BookingDetails(
                             or_city="Marseille",
-                            dst_city="Paris"
+                            dst_city="Paris",
+                            turns=[
+                                "I want to book a flight from Marseille to Paris"]
                         ).__dict__})
         )
 
@@ -54,7 +56,9 @@ class TestLuis(aiounittest.AsyncTestCase):
             json.dumps({"intent": "book",
                         "booking_details": BookingDetails(
                             str_date="2022-08-12",
-                            end_date="2022-09-15"
+                            end_date="2022-09-15",
+                            turns=["I want to book a flight from Marseille to Paris",
+                                   "I want to travel from the 12 aug 2022 until 15 september 2022"]
                         ).__dict__})
         )
 
@@ -63,20 +67,9 @@ class TestLuis(aiounittest.AsyncTestCase):
             json.dumps({"intent": "book",
                         "booking_details": BookingDetails(
                             budget="$ 500",
-                        ).__dict__})
-        )
-
-        await adapter.test(
-            """I want to book a flight from Marseille to Paris
-            I want to spend maximun $500
-            I want to travel from the 12 aug 2022 until 15 september 2022""",
-            json.dumps({"intent": "book",
-                        "booking_details": BookingDetails(
-                            or_city="Marseille",
-                            dst_city="Paris",
-                            str_date="2022-08-12",
-                            end_date="2022-09-15",
-                            budget="$ 500",
+                            turns=["I want to book a flight from Marseille to Paris",
+                                   "I want to travel from the 12 aug 2022 until 15 september 2022",
+                                   "I want to spend maximun $500"]
                         ).__dict__})
         )
 
@@ -96,8 +89,6 @@ class TestDialog(aiounittest.AsyncTestCase):
 
             await conv_state.save_changes(turn_context)
 
-        
-
         conv_state = ConversationState(MemoryStorage())
         dialogs_state = conv_state.create_property("dialog-state")
         dialogs = DialogSet(dialogs_state)
@@ -113,13 +104,12 @@ class TestDialog(aiounittest.AsyncTestCase):
         wf_dialog = await main_dialog.find_dialog("WFDialog")
         dialogs.add(wf_dialog)
 
-
         adapter = TestAdapter(exec_test)
 
         await adapter.test('Hello', 'What can I help you with today?')
 
         await adapter.test('I want to book a fligth', 'From what city will you be travelling?')
-        
+
         await adapter.test('Paris', 'To what city would you like to travel?')
 
         await adapter.test('Marseille', 'What is your budget for this trip?')

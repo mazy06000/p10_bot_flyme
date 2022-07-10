@@ -59,6 +59,7 @@ class BookingDialog(CancelAndHelpDialog):
         booking_details = step_context.options
 
         if booking_details.or_city is None:
+            booking_details.turns.append("From what city will you be travelling?")
             return await step_context.prompt(
                 TextPrompt.__name__,
                 PromptOptions(
@@ -76,8 +77,10 @@ class BookingDialog(CancelAndHelpDialog):
 
         # Capture the response to the previous step's prompt
         booking_details.or_city = step_context.result
+        booking_details.turns.append(step_context.result)
 
         if booking_details.dst_city is None:
+            booking_details.turns.append("To what city would you like to travel?")
             return await step_context.prompt(
                 TextPrompt.__name__,
                 PromptOptions(
@@ -93,7 +96,10 @@ class BookingDialog(CancelAndHelpDialog):
 
         # Capture the response to the previous step's prompt
         booking_details.dst_city = step_context.result
+        booking_details.turns.append(step_context.result)
+
         if booking_details.budget is None:
+            booking_details.turns.append("What is your budget for this trip?")
             return await step_context.prompt(
                 TextPrompt.__name__,
                 PromptOptions(
@@ -113,9 +119,12 @@ class BookingDialog(CancelAndHelpDialog):
 
         # Capture the results of the previous step
         booking_details.budget = step_context.result
+        booking_details.turns.append(step_context.result)
+
         if not booking_details.str_date or self.is_ambiguous(
             booking_details.str_date
         ):
+            booking_details.turns.append("What is the departure date?")
             return await step_context.begin_dialog(
                 "StartDate", booking_details.str_date
             )  # pylint: disable=line-too-long
@@ -132,9 +141,12 @@ class BookingDialog(CancelAndHelpDialog):
 
         # Capture the results of the previous step
         booking_details.str_date = step_context.result
+        booking_details.turns.append(step_context.result)
+
         if not booking_details.end_date or self.is_ambiguous(
             booking_details.end_date
         ):
+            booking_details.turns.append("What is the departure date?")
             return await step_context.begin_dialog(
                 "EndDate", booking_details.end_date
             )  # pylint: disable=line-too-long
@@ -150,6 +162,7 @@ class BookingDialog(CancelAndHelpDialog):
 
         # Capture the results of the previous step
         booking_details.end_date = step_context.result
+        booking_details.turns.append(step_context.result)
 
         msg = f"""Please confirm your travel details:\n
         - From: {booking_details.or_city}\n

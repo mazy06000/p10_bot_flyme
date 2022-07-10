@@ -10,11 +10,12 @@ class BookingDetails:
         budget: str = None,
         str_date: str = None,
         end_date: str = None,
+        turns: list = []
     ):
         self.dst_city = dst_city
         self.or_city = or_city
         self.budget = budget
         self.str_date = str_date
         self.end_date = end_date
-        self.turns = []
+        self.turns = turns
 
