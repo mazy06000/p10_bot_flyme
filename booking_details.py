@@ -16,4 +16,5 @@ class BookingDetails:
         self.budget = budget
         self.str_date = str_date
         self.end_date = end_date
+        self.turns = []
 

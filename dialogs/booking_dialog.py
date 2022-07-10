@@ -54,7 +54,6 @@ class BookingDialog(CancelAndHelpDialog):
         self.initial_dialog_id = WaterfallDialog.__name__
 
 
-
     async def or_city_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Prompt for origin city."""
         booking_details = step_context.options
@@ -77,6 +76,7 @@ class BookingDialog(CancelAndHelpDialog):
 
         # Capture the response to the previous step's prompt
         booking_details.or_city = step_context.result
+
         if booking_details.dst_city is None:
             return await step_context.prompt(
                 TextPrompt.__name__,
@@ -170,10 +170,7 @@ class BookingDialog(CancelAndHelpDialog):
         booking_details = step_context.options
 
         if step_context.result:
-            # self.telemetry_client.track_trace(
-            #     "booking_accepted",
-            #     properties=booking_details.__dict__,
-            # )
+            
             self.telemetry_client.track_metric(
                 "booking_accepted",
                 0,0

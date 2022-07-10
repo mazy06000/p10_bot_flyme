@@ -24,8 +24,9 @@ def get_timex(or_date):
         year = "XXXX"
 
     final_date = f"{year}-{month}-{day}"
-    
+
     return final_date
+
 
 class Intent(Enum):
     BOOK_FLIGHT = "book"
@@ -86,13 +87,12 @@ class LuisHelper:
                     if recognizer_result.entities.get("or_city")[0]:
                         result.or_city = from_entities[0].capitalize()
 
-
                 budget_entities = recognizer_result.entities.get(
                     "budget", []
                 )
                 if len(budget_entities) > 0:
                     if recognizer_result.entities.get("budget")[0]:
-                        result.budget = budget_entities[0]     
+                        result.budget = budget_entities[0]
 
                 start_date_entities = recognizer_result.entities.get(
                     "str_date", []
@@ -100,7 +100,7 @@ class LuisHelper:
                 if len(start_date_entities) > 0:
                     if recognizer_result.entities.get("str_date")[0]:
                         result.str_date = get_timex(start_date_entities[0])
-                
+
                 end_date_entities = recognizer_result.entities.get(
                     "end_date", []
                 )
@@ -108,20 +108,13 @@ class LuisHelper:
                     if recognizer_result.entities.get("end_date")[0]:
                         result.end_date = get_timex(end_date_entities[0])
 
-                # This value will be a TIMEX. And we are only interested in a Date so grab the first result and drop
-                # the Time part. TIMEX is a format that represents DateTime expressions that include some ambiguity.
-                # e.g. missing a Year.
-                # date_entities = recognizer_result.entities.get("datetime", [])
-                # if date_entities:
-                #     timex = date_entities[0]["timex"]
-
-                #     if timex:
-                #         datetime = timex[0].split("T")[0]
-
-                #         result.travel_date = datetime
-
-                # else:
-                #     result.travel_date = None
+                result.turns.append({"text": turn_context,
+                                     "labels": {"acts": [
+                                         {"args": [
+                                             {"val": intent, "key": "intent"}]},
+                                         {"args": [{"val": val, "key": key} for key, val in result.__dict__.items(
+                                         ) if key != 'turns' and val is not None]}
+                                     ]}})
 
         except Exception as exception:
             print(exception)
