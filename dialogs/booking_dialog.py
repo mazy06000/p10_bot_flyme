@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 """Flight booking dialog."""
 
+import json
 from datatypes_date_time.timex import Timex
 
 from botbuilder.dialogs import WaterfallDialog, WaterfallStepContext, DialogTurnResult
@@ -184,10 +185,25 @@ class BookingDialog(CancelAndHelpDialog):
 
         if step_context.result:
             
-            self.telemetry_client.track_metric(
-                "booking_accepted",
-                0,0
+            # self.telemetry_client.track_metric(
+            #     "booking_accepted",
+            #     0,0
+            # )
+
+            self.telemetry_client.track_trace(
+                "booking_refused",
+                properties=booking_details.__dict__,
             )
+
+            with open('performances.json') as json_file:
+                performances = json.load(json_file)
+     
+            performances["successfull"].append(booking_details.__dict__)
+
+            json_string = json.dumps(performances)
+            with open("performances.json", "w") as outfile:
+                outfile.write(json_string)
+
 
             return await step_context.end_dialog(booking_details)
         
@@ -197,10 +213,20 @@ class BookingDialog(CancelAndHelpDialog):
                 properties=booking_details.__dict__,
             )
 
-        self.telemetry_client.track_metric(
-                "booking_refused",
-                0,0
-            )
+
+        with open('performances.json') as json_file:
+                performances = json.load(json_file)
+     
+        performances["unsuccessfull"].append(booking_details.__dict__)
+
+        json_string = json.dumps(performances)
+        with open("performances.json", "w") as outfile:
+            outfile.write(json_string)
+
+        # self.telemetry_client.track_metric(
+        #         "booking_refused",
+        #         0,0
+        #     )
 
         return await step_context.end_dialog()
 
