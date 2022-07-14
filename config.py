@@ -4,19 +4,19 @@
 """Configuration for the bot."""
 
 import os
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
-LUIS_ID  = os.getenv("LUIS_ID")
-LUIS_KEY  = os.getenv("LUIS_KEY")
-LUIS_HOST  = os.getenv("LUIS_HOST")
-INSIGHTS_KEY  = os.getenv("INSIGHTS_KEY")
+# LUIS_ID  = os.getenv("LUIS_ID")
+# LUIS_KEY  = os.getenv("LUIS_KEY")
+# LUIS_HOST  = os.getenv("LUIS_HOST")
+# INSIGHTS_KEY  = os.getenv("INSIGHTS_KEY")
 
 
 class DefaultConfig:
     """Configuration for the bot."""
 
-    PORT = 3978 #8000 
+    PORT = 8000 #3978
     APP_ID = os.environ.get("MicrosoftAppId", "")
     APP_PASSWORD = os.environ.get("MicrosoftAppPassword", "")
     LUIS_APP_ID = os.environ.get("LuisAppId", os.environ["LUIS_ID"])
