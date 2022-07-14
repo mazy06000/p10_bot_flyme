@@ -1,0 +1,14 @@
+{
+    "turns": [
+        {
+            "text": "i want to book a trip from Paris to London, from 23 aug 2022 to 30 aug 2022 for $500 Paris London , $ 500 2022-08-23 2022-08-30",
+            "labels": {
+                "dst_city": "London ,",
+                "or_city": "Paris",
+                "budget": "$ 500",
+                "str_date": "2022-08-23",
+                "end_date": "2022-08-30"
+            }
+        }
+    ]
+}

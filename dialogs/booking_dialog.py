@@ -54,10 +54,13 @@ class BookingDialog(CancelAndHelpDialog):
 
         self.initial_dialog_id = WaterfallDialog.__name__
 
+        self.user_dialog = []
+
 
     async def or_city_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Prompt for origin city."""
         booking_details = step_context.options
+        self.user_dialog.append(booking_details.turns[0])
 
         if booking_details.or_city is None:
             booking_details.turns.append("From what city will you be travelling?")
@@ -79,6 +82,7 @@ class BookingDialog(CancelAndHelpDialog):
         # Capture the response to the previous step's prompt
         booking_details.or_city = step_context.result
         booking_details.turns.append(step_context.result)
+        self.user_dialog.append(step_context.result)
 
         if booking_details.dst_city is None:
             booking_details.turns.append("To what city would you like to travel?")
@@ -98,6 +102,7 @@ class BookingDialog(CancelAndHelpDialog):
         # Capture the response to the previous step's prompt
         booking_details.dst_city = step_context.result
         booking_details.turns.append(step_context.result)
+        self.user_dialog.append(step_context.result)
 
         if booking_details.budget is None:
             booking_details.turns.append("What is your budget for this trip?")
@@ -121,6 +126,7 @@ class BookingDialog(CancelAndHelpDialog):
         # Capture the results of the previous step
         booking_details.budget = step_context.result
         booking_details.turns.append(step_context.result)
+        self.user_dialog.append(step_context.result)
 
         if not booking_details.str_date or self.is_ambiguous(
             booking_details.str_date
@@ -143,6 +149,7 @@ class BookingDialog(CancelAndHelpDialog):
         # Capture the results of the previous step
         booking_details.str_date = step_context.result
         booking_details.turns.append(step_context.result)
+        self.user_dialog.append(step_context.result)
 
         if not booking_details.end_date or self.is_ambiguous(
             booking_details.end_date
@@ -164,6 +171,7 @@ class BookingDialog(CancelAndHelpDialog):
         # Capture the results of the previous step
         booking_details.end_date = step_context.result
         booking_details.turns.append(step_context.result)
+        self.user_dialog.append(step_context.result)
 
         msg = f"""Please confirm your travel details:\n
         - From: {booking_details.or_city}\n
@@ -191,7 +199,7 @@ class BookingDialog(CancelAndHelpDialog):
             # )
 
             self.telemetry_client.track_trace(
-                "booking_refused",
+                "booking_accepted",
                 properties=booking_details.__dict__,
             )
 
@@ -215,13 +223,24 @@ class BookingDialog(CancelAndHelpDialog):
 
 
         with open('performances.json') as json_file:
-                performances = json.load(json_file)
+            performances = json.load(json_file)
      
         performances["unsuccessfull"].append(booking_details.__dict__)
 
         json_string = json.dumps(performances)
         with open("performances.json", "w") as outfile:
             outfile.write(json_string)
+
+        # new data
+        with open('new_data.json') as json_file:
+            new_data = json.load(json_file)
+     
+        new_data["turns"].append({"text":" ".join(self.user_dialog), "labels":{key:value for key, value in booking_details.__dict__.items() if key!="turns"}})
+
+        json_string = json.dumps(new_data)
+        with open("new_data.json", "w") as outfile:
+            outfile.write(json_string)
+
 
         # self.telemetry_client.track_metric(
         #         "booking_refused",
